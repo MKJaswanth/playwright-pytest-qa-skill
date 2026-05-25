@@ -19,6 +19,8 @@ This skill guides Codex through a complete end-to-end QA automation workflow:
 - Add a live Rich terminal progress display while tests execute
 - Generate manager/client-friendly HTML test reports
 - Preserve failure screenshots, videos, and Playwright traces
+- Add enterprise practices for retries, CI/CD, visual regression, trace debugging,
+  and API mocking
 
 It is intended for staging QA automation where tests may create roles, users,
 leads, teams, projects, master data, or similar records that must not build up
@@ -35,6 +37,7 @@ Use this skill when asking Codex to:
 - Add cleanup after tests create data
 - Generate QA reports for test runs
 - Improve terminal output for large test suites
+- Add CI/CD execution, flaky test handling, visual comparisons, or API mocks
 
 ## Install
 
@@ -61,7 +64,11 @@ playwright-pytest-qa/
 └── references/
     ├── cleanup.md
     ├── terminal.md
-    └── report.md
+    ├── report.md
+    ├── flakiness.md
+    ├── cicd.md
+    ├── visual-regression.md
+    └── api-mocking.md
 ```
 
 ## Repository Layout
@@ -69,13 +76,18 @@ playwright-pytest-qa/
 ```text
 playwright-pytest-qa-skill/
 ├── README.md
+├── LICENSE
 ├── playwright-pytest-qa.skill
 └── playwright-pytest-qa/
     ├── SKILL.md
     └── references/
         ├── cleanup.md
         ├── terminal.md
-        └── report.md
+        ├── report.md
+        ├── flakiness.md
+        ├── cicd.md
+        ├── visual-regression.md
+        └── api-mocking.md
 ```
 
 ## Skill Contents
@@ -91,6 +103,7 @@ playwright-pytest-qa-skill/
 - Cleanup fixture wiring
 - Live terminal plugin wiring
 - HTML report plugin wiring
+- Enterprise readiness guidance
 - Common commands
 
 The `references/` folder contains implementation details:
@@ -98,6 +111,21 @@ The `references/` folder contains implementation details:
 - `cleanup.md`: cleanup registry and cleanup API client
 - `terminal.md`: Rich-based live pytest terminal plugin
 - `report.md`: HTML report generation behavior and setup notes
+- `flakiness.md`: retry policy, flaky test quarantine, and stabilization rules
+- `cicd.md`: GitHub Actions workflow and CI artifact handling
+- `visual-regression.md`: Playwright screenshot comparison strategy
+- `api-mocking.md`: `page.route()` patterns for frontend-only states
+
+## Enterprise Readiness
+
+The skill now includes production-suite guidance for:
+
+- Flaky test retries with `pytest-rerunfailures`
+- GitHub Actions CI/CD execution
+- CI artifact upload for reports, screenshots, videos, and traces
+- Playwright trace viewer debugging
+- Visual regression testing with screenshot baselines
+- API mocking with `page.route()`
 
 ## Typical Prompt Examples
 
@@ -111,6 +139,14 @@ Create a pytest automation framework with cleanup so staging data is deleted.
 
 ```text
 Add HTML reporting and live terminal output to my Playwright tests.
+```
+
+```text
+Add CI/CD, flaky test retries, and trace debugging to my Playwright pytest suite.
+```
+
+```text
+Write visual regression tests and API mocks for frontend states.
 ```
 
 ## Notes

@@ -9,12 +9,14 @@ description: >
   on staging), live terminal display, and professional HTML report generation for managers
   and clients. Always trigger this skill when test case writing or automation is mentioned
   — even casually like "can you write tests for this" or "automate this flow".
+  Also covers enterprise QA practices such as flaky test retries, CI/CD execution,
+  visual regression testing, Playwright trace debugging, and API mocking with page.route().
 ---
 
 # Playwright + pytest QA Automation Skill
 
 Complete workflow for building a professional test automation suite from scratch.
-Covers 5 pillars: **Setup → Test Writing → Cleanup → Terminal Display → Reports**
+Covers 6 pillars: **Setup → Test Writing → Cleanup → Terminal Display → Reports → Enterprise Readiness**
 
 ---
 
@@ -54,6 +56,7 @@ python-dotenv>=1.0.0
 requests>=2.31.0
 faker>=24.0.0
 rich>=13.0.0
+pytest-rerunfailures>=14.0
 ```
 
 ### pytest.ini
@@ -270,6 +273,36 @@ reports/
 
 ---
 
+## PILLAR 6 — ENTERPRISE READINESS
+
+Use these practices for suites that must run reliably in CI/CD and produce actionable failure evidence.
+
+**Flaky test management** — See `references/flakiness.md`.
+- Add `pytest-rerunfailures` to requirements.
+- Use retries only for infrastructure noise, network blips, and browser timing variance.
+- Never use retries to hide deterministic product bugs.
+
+**CI/CD execution** — See `references/cicd.md`.
+- Add a GitHub Actions workflow under `.github/workflows/tests.yml`.
+- Install Python dependencies and Playwright browsers in the pipeline.
+- Store URLs, users, passwords, and tokens in GitHub Actions secrets.
+- Upload `reports/` as an artifact with `if: always()`.
+
+**Visual regression testing** — See `references/visual-regression.md`.
+- Use `expect(page).to_have_screenshot()` for stable pages and critical UI states.
+- Generate baselines in the same OS/browser/font environment used by CI.
+- Mask dynamic regions such as timestamps, avatars, counters, ads, and random data.
+
+**Trace viewer debugging** — See `references/report.md`.
+- Keep `--tracing=retain-on-failure` enabled.
+- Download `trace.zip` from CI artifacts and inspect it with `playwright show-trace`.
+
+**API mocking** — See `references/api-mocking.md`.
+- Use `page.route()` for frontend-only states, empty states, error states, slow responses, and hard-to-create backend scenarios.
+- Use real APIs for end-to-end confidence paths and cleanup validation.
+
+---
+
 ## CONFTEST.PY — WIRING EVERYTHING TOGETHER
 
 ```python
@@ -366,6 +399,12 @@ pytest tests/milestone1/test_us003_roles_management.py -v
 # Run in parallel (faster)
 pytest tests/milestone1/ -v -n auto
 
+# Run with limited retries for infra/network noise
+pytest tests/milestone1/ -v --reruns 2 --reruns-delay 1
+
+# Open a retained Playwright trace
+playwright show-trace reports/failures/path/to/trace.zip
+
 # Run and save timestamped report
 ./run_tests.sh
 ```
@@ -389,3 +428,7 @@ pytest tests/milestone1/ -v -n auto
 - `references/cleanup.md`  — Full cleanup_registry.py + cleanup_client.py code
 - `references/terminal.md` — Full live_terminal.py code
 - `references/report.md`   — Full report_plugin.py code
+- `references/flakiness.md` — Retry policy, flaky test quarantine, and stability rules
+- `references/cicd.md` — GitHub Actions workflow and CI artifact handling
+- `references/visual-regression.md` — Screenshot comparisons and baseline strategy
+- `references/api-mocking.md` — `page.route()` mocking patterns for frontend states

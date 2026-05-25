@@ -60,6 +60,26 @@ reports/failures/
     └── trace.zip            ← open with: playwright show-trace trace.zip
 ```
 
+## Trace viewer guidance
+
+The trace viewer is the fastest way to debug failed CI runs because it shows actions, DOM snapshots, network requests, console messages, and timing.
+
+Open a retained trace locally:
+
+```bash
+playwright show-trace reports/failures/path/to/trace.zip
+```
+
+For CI failures:
+
+1. Upload `reports/` or `test-results/` as a CI artifact with `if: always()`.
+2. Download the artifact from the failed pipeline run.
+3. Unzip it locally.
+4. Run `playwright show-trace path/to/trace.zip`.
+5. Inspect the action timeline, before/after DOM snapshots, console tab, and network tab.
+
+When traces are too large, keep `--tracing=retain-on-failure` instead of `on` so successful tests do not store traces.
+
 ## Full report_plugin.py code
 See the already-generated file at:
 `/mnt/user-data/outputs/report_plugin.py`
