@@ -1,0 +1,20 @@
+Lead Management - Milestone 1   480 tests collected
+
+  1/480  [#-------------------]  PASS  TC_001  Create Role Valid        Roles Mgmt   0.82s   PASSED
+  2/480  [##------------------]  PASS  TC_002  Role Name Mandatory      Roles Mgmt   1.10s   PASSED
+  3/480  [###-----------------]  FAIL  TC_003  Duplicate Role           Roles Mgmt   1.55s   FAILED
+  4/480  [####----------------]  PASS  TC_004  Edit Role Permission     Roles Mgmt   1.21s   PASSED
+  5/480  [#####---------------]  PASS  TC_005  Delete Role              Roles Mgmt   1.33s   PASSED
+
+  -- 5 run · 4 passed · 1 failed · 0 skipped · 80% pass rate · 12s elapsed --
+
+Test Run Summary
+
+  Total   : 480
+  Passed  : 478
+  Failed  : 2
+  Skipped : 0
+  Rate    : 99.6%
+  Time    : 4m 32s
+
+HTML report -> reports/milestone1_report.html

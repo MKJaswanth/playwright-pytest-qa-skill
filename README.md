@@ -3,6 +3,8 @@
 Reusable Codex skill for creating professional QA automation suites with
 Playwright and pytest.
 
+Current version: `v1.1.0`
+
 The downloadable file is:
 
 ```text
@@ -77,7 +79,13 @@ playwright-pytest-qa/
 playwright-pytest-qa-skill/
 ├── README.md
 ├── LICENSE
+├── CHANGELOG.md
+├── requirements.txt
 ├── playwright-pytest-qa.skill
+├── docs/
+│   └── sample-html-report-preview.svg
+├── examples/
+│   └── sample-terminal-output.txt
 └── playwright-pytest-qa/
     ├── SKILL.md
     └── references/
@@ -116,6 +124,24 @@ The `references/` folder contains implementation details:
 - `visual-regression.md`: Playwright screenshot comparison strategy
 - `api-mocking.md`: `page.route()` patterns for frontend-only states
 
+## Quick Dependencies
+
+The generated QA framework uses:
+
+```text
+playwright>=1.44.0
+pytest>=8.0.0
+pytest-playwright>=0.5.0
+pytest-xdist>=3.5.0
+pytest-rerunfailures>=14.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+faker>=24.0.0
+rich>=13.0.0
+```
+
+These are also listed in `requirements.txt`.
+
 ## Enterprise Readiness
 
 The skill now includes production-suite guidance for:
@@ -126,6 +152,38 @@ The skill now includes production-suite guidance for:
 - Playwright trace viewer debugging
 - Visual regression testing with screenshot baselines
 - API mocking with `page.route()`
+
+## Output Preview
+
+Sample Rich-style terminal output:
+
+```text
+Lead Management - Milestone 1   480 tests collected
+
+  1/480  [#-------------------]  PASS  TC_001  Create Role Valid        Roles Mgmt   0.82s   PASSED
+  2/480  [##------------------]  PASS  TC_002  Role Name Mandatory      Roles Mgmt   1.10s   PASSED
+  3/480  [###-----------------]  FAIL  TC_003  Duplicate Role           Roles Mgmt   1.55s   FAILED
+
+  -- 5 run · 4 passed · 1 failed · 0 skipped · 80% pass rate · 12s elapsed --
+```
+
+Sample HTML report preview:
+
+![Sample HTML report preview](docs/sample-html-report-preview.svg)
+
+Full sample terminal output is available in `examples/sample-terminal-output.txt`.
+
+## Versioning
+
+Use semantic versioning for releases:
+
+```text
+v1.0.0 - initial public release
+v1.1.0 - enterprise readiness update
+```
+
+Attach `playwright-pytest-qa.skill` to each GitHub Release so users can download a stable version.
+Changes are tracked in `CHANGELOG.md`.
 
 ## Typical Prompt Examples
 
@@ -155,3 +213,4 @@ Write visual regression tests and API mocks for frontend states.
 - Store credentials and base URLs in `.env`; do not hardcode secrets in tests.
 - Prefer stable selectors such as `data-testid`, IDs, ARIA labels, and names.
 - Call `track("resource_type", id)` immediately after creating test data.
+- Use the clean GitHub repo name `playwright-pytest-qa-skill` for public sharing.

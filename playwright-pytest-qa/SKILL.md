@@ -65,6 +65,8 @@ pytest-rerunfailures>=14.0
 addopts =
     -v
     --tb=short
+    --reruns 2                   ; retry flaky tests 2 times
+    --reruns-delay 1             ; wait 1s between retries
     --screenshot=only-on-failure
     --video=retain-on-failure
     --tracing=retain-on-failure
@@ -373,7 +375,69 @@ def api():
         def delete(self, path, token=None):
             return requests.delete(f"{self.base}{path}", headers=self._h(token), timeout=30)
     return ApiClient()
+---
+
+## PILLAR 6 — CI/CD & PIPELINES (GitHub Actions)
+
+Professional suites must run automatically. Store secrets in GitHub and use this workflow.
+
+**File: `.github/workflows/tests.yml`**
+```yaml
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Ensure browsers are installed
+      run: playwright install --with-deps chromium
+    - name: Run tests
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        SUPER_ADMIN_EMAIL: ${{ secrets.SUPER_ADMIN_EMAIL }}
+        SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
+      run: pytest tests/milestone1/
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: reports/
+        retention-days: 30
 ```
+
+---
+
+## PILLAR 7 — ADVANCED DEBUGGING (TRACES & VISUALS)
+
+### Trace Viewer (The #1 Debugging Tool)
+When a test fails in CI, download the `trace.zip` from the artifact and run:
+```bash
+playwright show-trace reports/failures/test_name/trace.zip
+```
+This allows you to step through every action, see the DOM at each step, and inspect network calls.
+
+### Visual Regression (Snapshot Testing)
+To ensure the UI doesn't "shift" or change color unexpectedly:
+```python
+def test_dashboard_visual(super_admin_page):
+    # compares current screen to a baseline image
+    expect(super_admin_page).to_have_screenshot("dashboard-baseline.png")
+```
+*Note: Run `pytest --update-snapshots` to generate the initial baseline.*
 
 ---
 
@@ -387,23 +451,17 @@ playwright install chromium
 # Run all milestone 1 tests
 pytest tests/milestone1/ -v
 
-# Run with live browser visible
-pytest tests/milestone1/ -v --headed
+# Run with 2 retries for flaky tests
+pytest --reruns 2 --reruns-delay 1
 
-# Run only failed tests from last run
-pytest tests/milestone1/ -v --lf
+# Debug with Trace Viewer
+playwright show-trace reports/failures/path/to/trace.zip
 
-# Run a specific user story
-pytest tests/milestone1/test_us003_roles_management.py -v
+# Update visual snapshots
+pytest --update-snapshots
 
 # Run in parallel (faster)
 pytest tests/milestone1/ -v -n auto
-
-# Run with limited retries for infra/network noise
-pytest tests/milestone1/ -v --reruns 2 --reruns-delay 1
-
-# Open a retained Playwright trace
-playwright show-trace reports/failures/path/to/trace.zip
 
 # Run and save timestamped report
 ./run_tests.sh
@@ -425,10 +483,10 @@ playwright show-trace reports/failures/path/to/trace.zip
 
 ## REFERENCES
 
-- `references/cleanup.md`  — Full cleanup_registry.py + cleanup_client.py code
-- `references/terminal.md` — Full live_terminal.py code
-- `references/report.md`   — Full report_plugin.py code
-- `references/flakiness.md` — Retry policy, flaky test quarantine, and stability rules
-- `references/cicd.md` — GitHub Actions workflow and CI artifact handling
-- `references/visual-regression.md` — Screenshot comparisons and baseline strategy
-- `references/api-mocking.md` — `page.route()` mocking patterns for frontend states
+- `references/cleanup.md`           — Full cleanup_registry.py + cleanup_client.py code
+- `references/terminal.md`          — Full live_terminal.py code
+- `references/report.md`            — Full report_plugin.py code
+- `references/flakiness.md`         — Retry policies and stabilization rules
+- `references/cicd.md`              — GitHub Actions workflow and artifact handling
+- `references/visual-regression.md` — Screenshot comparison strategy
+- `references/api-mocking.md`       — page.route() patterns for frontend-only states

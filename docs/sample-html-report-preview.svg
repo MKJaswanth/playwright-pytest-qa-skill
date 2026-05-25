@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Sample Playwright pytest QA HTML report preview</title>
+  <desc id="desc">Preview of a QA report dashboard with stat cards, chart area, module progress, and test table.</desc>
+  <rect width="1200" height="720" fill="#f6f8fb"/>
+  <rect x="48" y="38" width="1104" height="92" rx="8" fill="#101828"/>
+  <text x="82" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" fill="#ffffff">Milestone 1 QA Automation Report</text>
+  <text x="82" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#b8c2d6">Playwright + pytest · Chromium · CI run #42 · 99.6% pass rate</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="48" y="162" width="198" height="112" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+    <text x="72" y="202" font-size="14" fill="#667085">Total</text>
+    <text x="72" y="244" font-size="42" font-weight="700" fill="#101828">480</text>
+
+    <rect x="274" y="162" width="198" height="112" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+    <text x="298" y="202" font-size="14" fill="#667085">Passed</text>
+    <text x="298" y="244" font-size="42" font-weight="700" fill="#16803c">478</text>
+
+    <rect x="500" y="162" width="198" height="112" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+    <text x="524" y="202" font-size="14" fill="#667085">Failed</text>
+    <text x="524" y="244" font-size="42" font-weight="700" fill="#c9252d">2</text>
+
+    <rect x="726" y="162" width="198" height="112" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+    <text x="750" y="202" font-size="14" fill="#667085">Duration</text>
+    <text x="750" y="244" font-size="42" font-weight="700" fill="#101828">4m 32s</text>
+
+    <rect x="954" y="162" width="198" height="112" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+    <text x="978" y="202" font-size="14" fill="#667085">Pass Rate</text>
+    <text x="978" y="244" font-size="42" font-weight="700" fill="#175cd3">99.6%</text>
+  </g>
+
+  <rect x="48" y="306" width="510" height="214" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+  <text x="78" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#101828">Module Breakdown</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="14">
+    <text x="78" y="388" fill="#344054">Roles Management</text>
+    <rect x="250" y="374" width="250" height="14" rx="7" fill="#e8edf5"/>
+    <rect x="250" y="374" width="236" height="14" rx="7" fill="#16803c"/>
+    <text x="512" y="388" fill="#344054">94/96</text>
+
+    <text x="78" y="428" fill="#344054">Permissions</text>
+    <rect x="250" y="414" width="250" height="14" rx="7" fill="#e8edf5"/>
+    <rect x="250" y="414" width="250" height="14" rx="7" fill="#16803c"/>
+    <text x="512" y="428" fill="#344054">88/88</text>
+
+    <text x="78" y="468" fill="#344054">Lead Sources</text>
+    <rect x="250" y="454" width="250" height="14" rx="7" fill="#e8edf5"/>
+    <rect x="250" y="454" width="244" height="14" rx="7" fill="#16803c"/>
+    <text x="512" y="468" fill="#344054">78/80</text>
+  </g>
+
+  <rect x="590" y="306" width="562" height="214" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+  <text x="620" y="348" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#101828">Trend</text>
+  <polyline points="630,470 680,455 730,462 780,430 830,425 880,410 930,392 980,402 1030,380 1080,372" fill="none" stroke="#175cd3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="630" y1="486" x2="1090" y2="486" stroke="#d0d5dd"/>
+  <line x1="630" y1="372" x2="1090" y2="372" stroke="#eef2f7"/>
+  <line x1="630" y1="429" x2="1090" y2="429" stroke="#eef2f7"/>
+
+  <rect x="48" y="552" width="1104" height="118" rx="8" fill="#ffffff" stroke="#dde3ee"/>
+  <text x="78" y="594" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#101828">Failed Tests</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="15">
+    <text x="78" y="628" fill="#c9252d" font-weight="700">FAILED</text>
+    <text x="162" y="628" fill="#175cd3" font-weight="700">TC_003</text>
+    <text x="235" y="628" fill="#344054">Duplicate Role validation</text>
+    <text x="1020" y="628" fill="#667085">trace.zip</text>
+
+    <text x="78" y="654" fill="#c9252d" font-weight="700">FAILED</text>
+    <text x="162" y="654" fill="#175cd3" font-weight="700">TC_117</text>
+    <text x="235" y="654" fill="#344054">Lead source permission boundary</text>
+    <text x="1020" y="654" fill="#667085">trace.zip</text>
+  </g>
+</svg>
