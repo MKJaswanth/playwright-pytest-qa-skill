@@ -375,69 +375,7 @@ def api():
         def delete(self, path, token=None):
             return requests.delete(f"{self.base}{path}", headers=self._h(token), timeout=30)
     return ApiClient()
----
-
-## PILLAR 6 — CI/CD & PIPELINES (GitHub Actions)
-
-Professional suites must run automatically. Store secrets in GitHub and use this workflow.
-
-**File: `.github/workflows/tests.yml`**
-```yaml
-name: Playwright Tests
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-
-jobs:
-  test:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Ensure browsers are installed
-      run: playwright install --with-deps chromium
-    - name: Run tests
-      env:
-        BASE_URL: ${{ secrets.BASE_URL }}
-        SUPER_ADMIN_EMAIL: ${{ secrets.SUPER_ADMIN_EMAIL }}
-        SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
-      run: pytest tests/milestone1/
-    - uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: reports/
-        retention-days: 30
 ```
-
----
-
-## PILLAR 7 — ADVANCED DEBUGGING (TRACES & VISUALS)
-
-### Trace Viewer (The #1 Debugging Tool)
-When a test fails in CI, download the `trace.zip` from the artifact and run:
-```bash
-playwright show-trace reports/failures/test_name/trace.zip
-```
-This allows you to step through every action, see the DOM at each step, and inspect network calls.
-
-### Visual Regression (Snapshot Testing)
-To ensure the UI doesn't "shift" or change color unexpectedly:
-```python
-def test_dashboard_visual(super_admin_page):
-    # compares current screen to a baseline image
-    expect(super_admin_page).to_have_screenshot("dashboard-baseline.png")
-```
-*Note: Run `pytest --update-snapshots` to generate the initial baseline.*
 
 ---
 
