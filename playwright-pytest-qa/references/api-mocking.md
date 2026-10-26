@@ -1,106 +1,30 @@
-# API Mocking Reference
+# API Mocking
 
-Use `page.route()` when the test goal is frontend behavior, not backend integration.
+Use mocked responses for frontend empty/error states, not to claim backend
+integration coverage. Register routes before navigation and use exact endpoints.
 
-## Decision rule
-
-Use real APIs for:
-
-- critical end-to-end flows
-- authentication
-- permissions
-- cleanup verification
-- API contract confidence
-
-Use mocked APIs for:
-
-- empty states
-- error states
-- loading states
-- permission-specific frontend states
-- hard-to-create backend conditions
-- slow responses and timeout behavior
-- frontend-only visual regression tests
-
-## Mock a successful empty response
+These examples run against the bundled local demo:
 
 ```python
-def test_empty_roles_state(super_admin_page):
-    super_admin_page.route(
-        "**/api/roles**",
-        lambda route: route.fulfill(
-            status=200,
-            content_type="application/json",
-            body='{"data":[]}',
-        ),
-    )
+from playwright.sync_api import expect
 
-    super_admin_page.goto("/roles")
-    assert "No roles found" in super_admin_page.text_content("body")
+def test_mock_empty_roles(page, base_url):
+    page.route("**/api/roles", lambda route: route.fulfill(json=[]))
+    page.goto(base_url)
+    expect(page.get_by_text("No roles found", exact=True)).to_be_visible()
+
+def test_mock_role(page, base_url):
+    page.route("**/api/roles", lambda route: route.fulfill(
+        json=[{"id": "demo", "name": "Mocked role"}],
+    ))
+    page.goto(base_url)
+    expect(page.get_by_role("listitem")).to_have_text("Mocked role")
 ```
 
-## Mock a server error
+Adapt response shapes and UI expectations to the actual application's contract.
+Blocking sleeps inside synchronous route handlers are not a reliable way to
+assert loading states. Use an explicitly controlled pending request with an
+async test setup if testing loading behavior.
 
-```python
-def test_roles_server_error(super_admin_page):
-    super_admin_page.route(
-        "**/api/roles**",
-        lambda route: route.fulfill(
-            status=500,
-            content_type="application/json",
-            body='{"message":"Internal server error"}',
-        ),
-    )
-
-    super_admin_page.goto("/roles")
-    assert "Unable to load roles" in super_admin_page.text_content("body")
-```
-
-## Mock slow backend response
-
-```python
-import time
-
-def test_roles_loading_state(super_admin_page):
-    def slow_response(route):
-        time.sleep(2)
-        route.fulfill(
-            status=200,
-            content_type="application/json",
-            body='{"data":[]}',
-        )
-
-    super_admin_page.route("**/api/roles**", slow_response)
-    super_admin_page.goto("/roles")
-    assert "Loading" in super_admin_page.text_content("body")
-```
-
-## Modify a real response
-
-Use `route.fetch()` when you want most of the real backend response but need to alter one field:
-
-```python
-import json
-
-def test_role_permission_banner(super_admin_page):
-    def patch_roles(route):
-        response = route.fetch()
-        body = response.json()
-        body["data"][0]["permission_count"] = 0
-        route.fulfill(
-            response=response,
-            body=json.dumps(body),
-        )
-
-    super_admin_page.route("**/api/roles**", patch_roles)
-    super_admin_page.goto("/roles")
-    assert "No permissions assigned" in super_admin_page.text_content("body")
-```
-
-## Keep mocks maintainable
-
-- Put repeated mock payloads in `fixtures/api_payloads.py`.
-- Use route patterns that match the exact endpoint.
-- Keep mocked tests separate from true end-to-end tests when possible.
-- Name tests clearly so reports show whether a test is mocked or real API backed.
-- Do not use mocks to claim backend coverage.
+Use real requests for authentication, resource creation/deletion, and critical
+end-to-end flows. Keep mock payloads small and maintain them with the API schema.

@@ -1,0 +1,42 @@
+name: Validate skill and starter
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: playwright-pytest-qa/assets/starter/requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r playwright-pytest-qa/assets/starter/requirements.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Verify starter and failure handling
+        run: python scripts/verify_starter.py
+      - name: Run publishable demo
+        working-directory: playwright-pytest-qa/assets/starter
+        run: python run_tests.py -q
+      - name: Build packages
+        run: python scripts/build_package.py
+      - name: Upload reports and packages
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-skill-evidence
+          path: |
+            playwright-pytest-qa/assets/starter/reports/
+            dist/
+            playwright-pytest-qa.skill

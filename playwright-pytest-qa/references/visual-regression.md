@@ -1,98 +1,29 @@
-# Visual Regression Testing Reference
+# Python Visual Regression
 
-Use Playwright visual comparisons for stable pages, critical layouts, and high-value UI states.
+Python Playwright supports taking screenshots, but the JavaScript Playwright
+Test `toHaveScreenshot` assertion is not provided by Python's `expect(page)`.
+Do not generate `expect(page).to_have_screenshot()`.
 
-## Basic screenshot assertion
+For pixel comparison, explicitly install a Python comparison plugin, for example
+`pytest-playwright-visual`, and follow its version-specific fixture and baseline
+options. It is optional and is not installed or validated by the starter.
+Verify the chosen plugin's API before generating tests.
 
-```python
-from playwright.sync_api import expect
-
-def test_dashboard_visual(super_admin_page):
-    super_admin_page.goto("/dashboard")
-    expect(super_admin_page).to_have_screenshot("dashboard.png")
-```
-
-## Component or region screenshot
-
-Prefer region screenshots when the full page contains dynamic content:
+Without a comparison plugin, capturing a screenshot is evidence, not a visual
+regression assertion:
 
 ```python
-from playwright.sync_api import expect
-
-def test_roles_table_visual(super_admin_page):
-    super_admin_page.goto("/roles")
-    table = super_admin_page.get_by_test_id("roles-table")
-    expect(table).to_have_screenshot("roles-table.png")
+def test_capture_roles(page, base_url, tmp_path):
+    page.goto(base_url)
+    page.get_by_role("heading", name="Roles", exact=True).wait_for()
+    page.screenshot(path=tmp_path / "roles.png", animations="disabled")
 ```
 
-## Mask dynamic regions
+For comparisons, generate and review baselines under the same OS, browser,
+fonts, viewport, scale, and locale as CI. Stabilize data and clocks, disable
+animations, and mask dynamic regions using `page.screenshot(mask=[...])`.
+Use pytest-managed page/context fixtures so failure artifacts remain available.
 
-Mask timestamps, counters, generated avatars, random IDs, ads, charts with live data, and user-specific content:
-
-```python
-from playwright.sync_api import expect
-
-def test_profile_visual(super_admin_page):
-    super_admin_page.goto("/profile")
-    expect(super_admin_page).to_have_screenshot(
-        "profile.png",
-        mask=[
-            super_admin_page.get_by_test_id("last-login"),
-            super_admin_page.get_by_test_id("avatar"),
-        ],
-    )
-```
-
-## Generate or update baselines
-
-```bash
-pytest tests/visual/ --update-snapshots
-```
-
-Commit baseline screenshots only after review.
-
-## CI guidance
-
-Visual baselines are sensitive to OS, browser, fonts, rendering, viewport size, and timezone.
-
-For reliable CI:
-
-- Generate baselines in the same environment where CI runs.
-- Pin browser choice and viewport size.
-- Avoid full-page screenshots when content is dynamic.
-- Use deterministic test data.
-- Mask or stabilize clocks, animations, charts, and third-party widgets.
-- Disable animations where possible.
-
-## Suggested viewport fixture
-
-```python
-@pytest.fixture
-def visual_page(browser_instance):
-    ctx = browser_instance.new_context(
-        viewport={"width": 1440, "height": 900},
-        device_scale_factor=1,
-        reduced_motion="reduce",
-    )
-    page = ctx.new_page()
-    yield page
-    ctx.close()
-```
-
-## When to use visual tests
-
-Good candidates:
-
-- dashboards
-- forms
-- navigation layouts
-- role/permission tables
-- invoice or report screens
-- empty/error/loading states
-
-Poor candidates:
-
-- pages with constantly changing data
-- highly animated screens
-- third-party embedded widgets
-- dashboards with live charts unless mocked or masked
+Keep pixel comparison distinct from accessibility tree snapshots. When using
+supported Playwright versions, `to_match_aria_snapshot` checks accessible structure,
+not rendered pixels.

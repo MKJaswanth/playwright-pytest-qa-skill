@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.0 - 2026-10-26
+
+- Added a runnable local UI/API starter and GitHub Actions verification.
+- Replaced manual browser contexts with pytest-managed fixtures for failure artifacts.
+- Added a cross-platform runner that archives reports and preserves pytest exit codes.
+- Replaced the missing custom report implementation with pytest-html.
+- Made cleanup per-test, reverse-ordered, and visible on errors.
+- Corrected Python visual-regression guidance and removed default retries.
+- Added reproducible marketplace ZIP and .skill builds plus Agensi listing copy.
+
 All notable changes to this skill package are documented here.
 
 ## v1.1.0 - 2026-05-25
