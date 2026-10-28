@@ -10,6 +10,19 @@ Version: **1.3.0**. MIT licensed. Created by [MKJaswanth](https://github.com/MKJ
 
 ## Install
 
+Via QASkills.sh CLI:
+
+```bash
+npx @qaskills/cli add python-playwright-pytest-suite
+```
+
+Via Claude Code plugin:
+
+```bash
+/plugin marketplace add MKJaswanth/playwright-pytest-qa-skill
+/plugin install playwright-pytest-qa@playwright-pytest-qa-skill
+```
+
 From a checkout of this repository:
 
 ```bash
