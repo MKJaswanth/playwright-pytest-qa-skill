@@ -5,8 +5,8 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "playwright-pytest-qa"
-EXCLUDED = {"__pycache__", ".pytest_cache", "reports", "test-results", ".venv"}
-VERSION = "1.2.0"
+EXCLUDED = {"__pycache__", ".pytest_cache", "reports", "test-results", ".venv", ".auth"}
+VERSION = "1.3.0"
 
 
 def build():

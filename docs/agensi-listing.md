@@ -14,8 +14,9 @@ HTML reports, failure screenshots, videos, traces, and CI guidance.
 ## Description
 
 A Codex skill for QA engineers and developers building Python browser automation.
-Includes a runnable local demonstration with five UI/API tests, page objects,
-per-test cleanup, and pytest-managed browser fixtures.
+Includes a runnable local demonstration with UI/API tests, page objects,
+cached storage_state login, per-test cleanup, worker-isolated data, and
+pytest-managed browser fixtures.
 
 The included runner archives HTML results while preserving test failure exit
 codes. Repository verification checks cleanup after failed tests, retained
@@ -30,13 +31,13 @@ additional configuration.
 
 - Price: Free
 - Category: Testing & Debugging
-- Version: 1.2.0
+- Version: 1.3.0
 - License: MIT
 - Author: MKJaswanth
 - Source: https://github.com/MKJaswanth/playwright-pytest-qa-skill
 - Tags: playwright, pytest, python, qa, browser-testing, test-automation
 - Requirements: Python 3.10+, pip, a supported Playwright OS, browser installation.
-- Upload: dist/playwright-pytest-qa-1.2.0.zip
+- Upload: dist/playwright-pytest-qa-1.3.0.zip
 
 ## Suggested Prompts
 

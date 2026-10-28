@@ -12,7 +12,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,7 +30,9 @@ jobs:
         working-directory: playwright-pytest-qa/assets/starter
         run: python run_tests.py -q
       - name: Build packages
-        run: python scripts/build_package.py
+        run: python scripts/package_skill.py
+      - name: Check skill installer
+        run: bash scripts/install.sh --help
       - name: Upload reports and packages
         if: always()
         uses: actions/upload-artifact@v4

@@ -33,11 +33,34 @@ jobs:
 ```
 
 Application suites need their actual base URL and authentication supplied through
-Actions secrets and consumed by their fixtures. Do not commit credentials or
-authentication state. Untrusted fork PRs do not receive repository secrets;
-keep the local demo as a credential-free check.
+Actions secrets and consumed by their fixtures. Map `SUPER_ADMIN_EMAIL` and
+`SUPER_ADMIN_PASSWORD` from secrets. Do not commit credentials or files under
+`.auth/`. Untrusted fork PRs do not receive repository secrets; keep the local
+demo as a check that does not need an external account.
+
+## App Process
+
+`run_tests.py` starts `APP_START_CMD` and each non-empty line of `APP_START_CMDS`
+when those variables are set. It polls `HEALTHCHECK_URL`, or `BASE_URL` when
+no health URL is set, using exponential backoff until `APP_START_TIMEOUT`
+seconds (default 60). Pytest then runs, and the runner always terminates the
+server process group, including child processes. A process that exits early or
+never becomes ready fails the job before pytest and returns a nonzero status.
+The bundled demo starts its own server inside the `base_url` fixture, so CI
+for this repository leaves `APP_START_CMD` unset.
+
+```yaml
+      - run: python run_tests.py --browser chromium
+        env:
+          APP_START_CMD: npm run dev
+          BASE_URL: http://127.0.0.1:3000
+          SUPER_ADMIN_EMAIL: ${{ secrets.SUPER_ADMIN_EMAIL }}
+          SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
+```
 
 Leave retries off by default. Add selected retries after investigating failures.
-Use `--browser` for pytest-managed fixtures; arbitrary `BROWSER` or `HEADLESS`
-environment variables do nothing unless your own configuration consumes them.
-Upload artifacts after failures and preserve the test process's exit status.
+Add `-n` only after worker-isolated names and cleanup are in place; see
+[parallelism.md](parallelism.md). Use `--browser` for pytest-managed fixtures;
+arbitrary `BROWSER` or `HEADLESS` environment variables do nothing unless your
+own configuration consumes them. Upload artifacts after failures and preserve
+the test process's exit status.

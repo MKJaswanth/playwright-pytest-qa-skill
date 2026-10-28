@@ -26,6 +26,9 @@ cannot discover that resource automatically. Use application-supported run IDs
 or isolated tenants for recovery when needed. Do not promise unconditional cleanup
 after forced process termination.
 
-The local starter is serial; validate data isolation before adding xdist workers.
-Its default all-tests run checks that a role from the preceding UI test is gone;
-`scripts/verify_starter.py` separately checks cleanup after a deliberate failure.
+`track` stores the xdist worker id with each resource and includes it in
+teardown errors. Generated names should use `resource_name`, which prefixes
+`{label}-{worker_id}-{short id}`. See [parallelism.md](parallelism.md) before
+running with `-n`. The default all-tests run checks that a role from the
+preceding UI test is gone; `scripts/verify_starter.py` separately checks
+cleanup after a deliberate failure.

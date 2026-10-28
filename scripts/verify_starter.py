@@ -43,18 +43,20 @@ def verify():
     with tempfile.TemporaryDirectory(prefix="qa-skill-verify-") as temp:
         project = Path(temp) / "starter"
         shutil.copytree(STARTER, project, ignore=shutil.ignore_patterns(
-            "__pycache__", ".pytest_cache", "reports", "test-results",
+            "__pycache__", ".pytest_cache", "reports", "test-results", ".auth",
         ))
         run(project, ["-q"], 0)
         assert (project / "reports" / "report.html").is_file()
         assert len(list((project / "reports" / "history").glob("*.html"))) == 1
+        run(project, ["-n", "2", "-q"], 0)
+        assert len(list((project / "reports" / "history").glob("*.html"))) == 2
 
         (project / "tests" / "test_evidence.py").write_text(FAILURE_CASES, encoding="utf-8")
         run(project, ["tests/test_evidence.py", "-q"], 1)
         artifacts = project / "reports" / "failures"
         for pattern in ("*.png", "*.webm", "trace.zip"):
             assert list(artifacts.rglob(pattern)), f"Missing failure evidence: {pattern}"
-        assert len(list((project / "reports" / "history").glob("*.html"))) == 2
+        assert len(list((project / "reports" / "history").glob("*.html"))) == 3
 
         run(project, ["-k", "does_not_match_any_test", "-q"], 5)
         run(project, ["--unknown-option-for-verification"], 4)

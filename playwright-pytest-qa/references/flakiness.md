@@ -16,7 +16,8 @@ def test_known_transient_flow(page):
 ```
 
 Record the issue and reason for any retry. Keep test-owned data unique and use
-retrying Playwright assertions rather than arbitrary sleeps.
+retrying Playwright assertions rather than arbitrary sleeps. See
+[anti-patterns.md](anti-patterns.md) and [parallelism.md](parallelism.md).
 
 Use a distinct `quarantined` marker for quarantine, rather than reusing the
 retry plugin's `flaky` marker. Declare it in pytest configuration and run the

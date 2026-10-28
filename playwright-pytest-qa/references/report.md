@@ -31,7 +31,11 @@ creation cannot supply browser screenshots.
 Copy `../assets/starter/run_tests.py` into the generated project.
 It removes a stale latest report before execution, invokes pytest with the current
 Python interpreter, archives the report with a UTC timestamp, and returns pytest's
-exit status. An archive error also produces a nonzero status.
+exit status. An archive error also produces a nonzero status. When
+`APP_START_CMD` is set, the same process starts the app, waits for
+`HEALTHCHECK_URL` or `BASE_URL`, and stops the process tree before returning
+that status. Accessibility assertion text from
+[accessibility.md](accessibility.md) is part of the pytest failure captured here.
 
 ```bash
 python run_tests.py

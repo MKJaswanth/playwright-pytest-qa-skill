@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.0 - 2026-10-28
+
+- Cache authenticated UI sessions in a worker-specific `storage_state` file and keep a form-login helper for login tests.
+- Isolate parallel data with `pytest-xdist` worker ids on `track` and generated resource names.
+- Start and stop local app processes from `run_tests.py` when `APP_START_CMD` is set, and preserve pytest's exit code.
+- Add accessibility and end-to-end anti-pattern references.
+- Install the skill into Codex, Claude Code, Cursor, or agents with `scripts/install.sh`.
+- Rebuild the marketplace ZIP and `.skill` archive as 1.3.0.
+
 ## v1.2.0 - 2026-10-26
 
 - Added a runnable local UI/API starter and GitHub Actions verification.
