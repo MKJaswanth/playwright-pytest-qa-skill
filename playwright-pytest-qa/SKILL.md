@@ -1,16 +1,15 @@
 ---
 name: playwright-pytest-qa
-description: >-
-  Build and repair production Python Playwright and pytest UI/API test suites
-  with page object model, storage_state login caching, pytest-xdist worker
-  isolation, test-data cleanup, HTML reports, failure traces, accessibility
-  scans, and CI. Use when the user mentions playwright, pytest, e2e, qa,
-  api testing, page object model, or flaky tests.
+description: Python Playwright + pytest QA skill for runnable UI/API tests, storage_state auth caching, xdist worker isolation, cleanup tracking, and HTML/trace failure reports.
+version: 1.3.0
+author: MKJaswanth
 license: MIT
-compatibility: Python 3.10+ and Playwright. Optional axe-playwright-python for WCAG scans.
-metadata:
-  author: MKJaswanth
-  version: "1.3.0"
+tags: [playwright, pytest, python, e2e, api-testing, qa, page-object-model]
+testingTypes: [e2e, api, visual]
+frameworks: [playwright, pytest]
+languages: [python]
+domains: [web, api]
+agents: [codex, claude-code, cursor, github-copilot]
 ---
 
 # Playwright + pytest QA
