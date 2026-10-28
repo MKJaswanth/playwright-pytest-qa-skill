@@ -1,0 +1,21 @@
+{
+  "name": "playwright-pytest-qa-skill",
+  "owner": {
+    "name": "MKJaswanth"
+  },
+  "plugins": [
+    {
+      "name": "playwright-pytest-qa",
+      "source": "./",
+      "description": "Python Playwright + pytest QA skill for runnable UI/API tests, storage_state auth caching, xdist worker isolation, cleanup tracking, and HTML/trace failure reports.",
+      "version": "1.3.0",
+      "author": {
+        "name": "MKJaswanth"
+      },
+      "license": "MIT",
+      "skills": [
+        "./playwright-pytest-qa"
+      ]
+    }
+  ]
+}
